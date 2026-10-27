@@ -16,7 +16,7 @@ jobs:
           APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
           APP_STORE_CONNECT_PRIVATE_KEY: ${{ secrets.APP_STORE_CONNECT_PRIVATE_KEY }}
         run: |
-          gem install jwt --no-document
+          sudo gem install jwt --no-document
           ruby -e '
             require "jwt"
             require "net/http"
