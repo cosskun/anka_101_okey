@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\Assets\Scripts\Core\Enums\*.cs" />
+    <Compile Include="..\Assets\Scripts\Core\Data\*.cs" />
+    <Compile Include="..\Assets\Scripts\Core\Config\*.cs" />
+    <Compile Include="..\Assets\Scripts\Core\Logic\*.cs" />
+    <Compile Include="..\Assets\Scripts\Core\AI\*.cs" />
+  </ItemGroup>
+
+</Project>

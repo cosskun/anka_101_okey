@@ -1,0 +1,61 @@
+name: Deploy to TestFlight
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build_ios:
+    name: Build & Upload to TestFlight
+    runs-on: macos-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+
+      - name: Install Dependencies
+        run: flutter pub get
+
+      - name: Prepare Flutter iOS Workspace
+        run: flutter build ios --config-only --release --no-codesign
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+          bundler-cache: true
+          working-directory: ios
+
+      - name: Run Fastlane (Sign & Upload to TestFlight)
+        working-directory: ios
+        env:
+          APP_STORE_CONNECT_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
+          APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+          APP_STORE_CONNECT_PRIVATE_KEY: ${{ secrets.APP_STORE_CONNECT_PRIVATE_KEY }}
+          GITHUB_RUN_NUMBER: ${{ github.run_number }}
+        run: |
+          if [ -z "$APP_STORE_CONNECT_KEY_ID" ] || [ -z "$APP_STORE_CONNECT_ISSUER_ID" ] || [ -z "$APP_STORE_CONNECT_PRIVATE_KEY" ]; then
+            echo "================================================================================"
+            echo "HATA: GitHub Secrets eksik!"
+            echo "Lütfen GitHub deponuzun Settings -> Secrets and variables -> Actions bölümüne gidin"
+            echo "ve şu 3 secret'ı ekleyin:"
+            echo "  1. APP_STORE_CONNECT_KEY_ID"
+            echo "  2. APP_STORE_CONNECT_ISSUER_ID"
+            echo "  3. APP_STORE_CONNECT_PRIVATE_KEY"
+            echo "================================================================================"
+            exit 1
+          fi
+          bundle exec fastlane beta
+
+      - name: Upload Signed IPA Artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Anka101Okey-iOS-IPA
+          path: ios/build/anka_101_okey.ipa
+          if-no-files-found: ignore
