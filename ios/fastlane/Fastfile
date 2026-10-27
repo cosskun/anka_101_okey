@@ -1,184 +1,182 @@
+require 'jwt'
+require 'net/http'
+require 'uri'
+require 'json'
+require 'openssl'
+
 default_platform(:ios)
 
-def ensure_bundle_id_exists(api_key, identifier, name)
-  require 'jwt'
-  require 'net/http'
-  require 'json'
-  require 'openssl'
+def get_asc_token(key_id, issuer_id, private_key_pem)
+  header = { alg: "ES256", kid: key_id, typ: "JWT" }
+  payload = { iss: issuer_id, exp: Time.now.to_i + (20 * 60), aud: "appstoreconnect-v1" }
+  ec_key = OpenSSL::PKey::EC.new(private_key_pem)
+  JWT.encode(payload, ec_key, 'ES256', header)
+end
 
-  UI.message("App Store Connect üzerinde '#{identifier}' Bundle ID kontrol ediliyor...")
+def revoke_old_distribution_certs(key_id, issuer_id, private_key_pem)
+  token = get_asc_token(key_id, issuer_id, private_key_pem)
+  ["DISTRIBUTION", "IOS_DISTRIBUTION"].each do |cert_type|
+    uri = URI("https://api.appstoreconnect.apple.com/v1/certificates?filter[certificateType]=#{cert_type}")
+    req = Net::HTTP::Get.new(uri)
+    req["Authorization"] = "Bearer #{token}"
+    res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+    if res.is_a?(Net::HTTPSuccess)
+      data = JSON.parse(res.body)
+      certs = data["data"] || []
+      certs.each do |c|
+        c_id = c["id"]
+        del_uri = URI("https://api.appstoreconnect.apple.com/v1/certificates/#{c_id}")
+        del_req = Net::HTTP::Delete.new(del_uri)
+        del_req["Authorization"] = "Bearer #{token}"
+        Net::HTTP.start(del_uri.hostname, del_uri.port, use_ssl: true) { |http| http.request(del_req) }
+        UI.message("Revoked old distribution cert: #{c_id}")
+      end
+    end
+  end
+end
 
-  ec_key = OpenSSL::PKey::EC.new(api_key[:key])
-  payload = {
-    iss: api_key[:issuer_id],
-    exp: Time.now.to_i + 1200,
-    aud: 'appstoreconnect-v1'
-  }
-  token = JWT.encode(payload, ec_key, 'ES256', { kid: api_key[:key_id], typ: 'JWT' })
+def ensure_bundle_id_exists(key_id, issuer_id, private_key_pem, bundle_id, app_name)
+  token = get_asc_token(key_id, issuer_id, private_key_pem)
 
-  headers = {
-    'Authorization' => "Bearer #{token}",
-    'Content-Type' => 'application/json'
-  }
-
-  uri = URI("https://api.appstoreconnect.apple.com/v1/bundleIds?filter[identifier]=#{identifier}")
-  res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
-    req = Net::HTTP::Get.new(uri, headers)
-    http.request(req)
+  apps_uri = URI("https://api.appstoreconnect.apple.com/v1/apps")
+  apps_req = Net::HTTP::Get.new(apps_uri)
+  apps_req["Authorization"] = "Bearer #{token}"
+  apps_res = Net::HTTP.start(apps_uri.hostname, apps_uri.port, use_ssl: true) { |http| http.request(apps_req) }
+  if apps_res.is_a?(Net::HTTPSuccess)
+    apps_data = JSON.parse(apps_res.body)
+    existing_apps = (apps_data["data"] || []).map { |a| "#{a['attributes']['name']} (#{a['attributes']['bundleId']})" }
+    UI.message("Existing Apps in App Store Connect: #{existing_apps.inspect}")
   end
 
-  if res.code == '200'
-    data = JSON.parse(res.body)['data'] || []
-    exact = data.find { |b| b.dig('attributes', 'identifier') == identifier }
-    if exact
-      UI.success("Bundle ID '#{identifier}' zaten kayıtlı!")
-      return
+  uri = URI("https://api.appstoreconnect.apple.com/v1/bundleIds?filter[identifier]=#{bundle_id}")
+  req = Net::HTTP::Get.new(uri)
+  req["Authorization"] = "Bearer #{token}"
+  res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+  
+  bundle_id_resource_id = nil
+  if res.is_a?(Net::HTTPSuccess)
+    data = JSON.parse(res.body)
+    if data["data"] && data["data"].length > 0
+      bundle_id_resource_id = data["data"][0]["id"]
+      UI.message("Bundle ID already registered: #{bundle_id} (ID: #{bundle_id_resource_id})")
     end
   end
 
-  UI.message("Bundle ID '#{identifier}' bulunamadı, otomatik oluşturuluyor...")
-  post_uri = URI("https://api.appstoreconnect.apple.com/v1/bundleIds")
-  body = {
-    data: {
-      type: 'bundleIds',
-      attributes: {
-        identifier: identifier,
-        name: name,
-        platform: 'IOS'
+  unless bundle_id_resource_id
+    post_uri = URI("https://api.appstoreconnect.apple.com/v1/bundleIds")
+    post_req = Net::HTTP::Post.new(post_uri)
+    post_req["Authorization"] = "Bearer #{token}"
+    post_req["Content-Type"] = "application/json"
+    post_req.body = JSON.dump({
+      data: {
+        type: "bundleIds",
+        attributes: {
+          identifier: bundle_id,
+          name: app_name[0...25],
+          platform: "UNIVERSAL"
+        }
       }
-    }
-  }.to_json
-
-  post_res = Net::HTTP.start(post_uri.hostname, post_uri.port, use_ssl: true) do |http|
-    req = Net::HTTP::Post.new(post_uri, headers)
-    req.body = body
-    http.request(req)
+    })
+    post_res = Net::HTTP.start(post_uri.hostname, post_uri.port, use_ssl: true) { |http| http.request(post_req) }
+    if post_res.is_a?(Net::HTTPSuccess) || post_res.code == "201"
+      post_data = JSON.parse(post_res.body)
+      bundle_id_resource_id = post_data["data"]["id"]
+      UI.message("Successfully registered Bundle ID: #{bundle_id} (ID: #{bundle_id_resource_id})")
+    else
+      UI.important("Bundle ID registration response: #{post_res.code} - #{post_res.body}")
+    end
   end
-
-  if post_res.code == '201'
-    UI.success("Bundle ID '#{identifier}' başarıyla oluşturuldu!")
-  else
-    UI.important("Bundle ID oluşturma yanıtı (#{post_res.code}): #{post_res.body}")
-  end
-rescue => e
-  UI.important("Bundle ID ön-kontrolü sırasında hata: #{e.message}")
-end
-
-def check_app_exists_in_asc(api_key, identifier)
-  require 'jwt'
-  require 'net/http'
-  require 'json'
-  require 'openssl'
-
-  ec_key = OpenSSL::PKey::EC.new(api_key[:key])
-  payload = {
-    iss: api_key[:issuer_id],
-    exp: Time.now.to_i + 1200,
-    aud: 'appstoreconnect-v1'
-  }
-  token = JWT.encode(payload, ec_key, 'ES256', { kid: api_key[:key_id], typ: 'JWT' })
-
-  headers = {
-    'Authorization' => "Bearer #{token}",
-    'Content-Type' => 'application/json'
-  }
-
-  uri = URI("https://api.appstoreconnect.apple.com/v1/apps?filter[bundleId]=#{identifier}")
-  res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
-    req = Net::HTTP::Get.new(uri, headers)
-    http.request(req)
-  end
-
-  if res.code == '200'
-    data = JSON.parse(res.body)['data'] || []
-    exact = data.find { |a| a.dig('attributes', 'bundleId') == identifier }
-    return !exact.nil?
-  end
-  false
-rescue => e
-  UI.important("App kontrolü sırasında hata: #{e.message}")
-  false
 end
 
 platform :ios do
   desc "Push a new beta build to TestFlight"
   lane :beta do
-    setup_ci
-
-    key_content = ENV["APP_STORE_CONNECT_PRIVATE_KEY"].to_s.strip
-    is_base64 = !key_content.include?("-----BEGIN PRIVATE KEY-----")
-
-    api_key = app_store_connect_api_key(
-      key_id: ENV["APP_STORE_CONNECT_KEY_ID"].to_s.strip,
-      issuer_id: ENV["APP_STORE_CONNECT_ISSUER_ID"].to_s.strip,
-      key_content: key_content,
-      is_key_content_base64: is_base64,
-      in_house: false
+    app_store_connect_api_key(
+      key_id: ENV["APP_STORE_CONNECT_KEY_ID"],
+      issuer_id: ENV["APP_STORE_CONNECT_ISSUER_ID"],
+      key_content: ENV["APP_STORE_CONNECT_PRIVATE_KEY"],
+      is_key_content_base64: false
     )
 
-    ensure_bundle_id_exists(api_key, "com.anka.okey101", "Anka 101 Okey")
+    keychain_name = "ci_keychain"
+    keychain_password = "ci_password"
 
-    cert(
-      api_key: api_key,
-      development: false
+    create_keychain(
+      name: keychain_name,
+      password: keychain_password,
+      default_keychain: true,
+      unlock: true,
+      timeout: 3600,
+      lock_when_sleeps: false
     )
 
-    sigh(
-      api_key: api_key,
-      app_identifier: "com.anka.okey101",
-      force: true
+    kc_path_db = File.expand_path("~/Library/Keychains/#{keychain_name}-db")
+    kc_path_raw = File.expand_path("~/Library/Keychains/#{keychain_name}")
+    kc_path = File.exist?(kc_path_db) ? kc_path_db : kc_path_raw
+
+    begin
+      get_certificates(
+        keychain_path: kc_path,
+        keychain_password: keychain_password
+      )
+    rescue => e
+      UI.important("Certificate limit reached or invalid certs. Cleaning old distribution certs and retrying...")
+      revoke_old_distribution_certs(
+        ENV["APP_STORE_CONNECT_KEY_ID"],
+        ENV["APP_STORE_CONNECT_ISSUER_ID"],
+        ENV["APP_STORE_CONNECT_PRIVATE_KEY"]
+      )
+      get_certificates(
+        keychain_path: kc_path,
+        keychain_password: keychain_password,
+        force: true
+      )
+    end
+
+    ensure_bundle_id_exists(
+      ENV["APP_STORE_CONNECT_KEY_ID"],
+      ENV["APP_STORE_CONNECT_ISSUER_ID"],
+      ENV["APP_STORE_CONNECT_PRIVATE_KEY"],
+      "com.antigravity.okey101.ankaOkey",
+      "Anka Okey"
     )
 
-    profile_uuid = Actions.lane_context[SharedValues::SIGH_UUID]
+    get_provisioning_profile(
+      app_identifier: "com.antigravity.okey101.ankaOkey"
+    )
+
     profile_name = Actions.lane_context[SharedValues::SIGH_NAME]
 
     update_code_signing_settings(
       use_automatic_signing: false,
       path: "Runner.xcodeproj",
       team_id: "BHYTLHA722",
-      bundle_identifier: "com.anka.okey101",
-      code_sign_identity: "iPhone Distribution",
+      bundle_identifier: "com.antigravity.okey101.ankaOkey",
       profile_name: profile_name,
-      profile_uuid: profile_uuid
-    )
-
-    increment_build_number(
-      build_number: ENV["GITHUB_RUN_NUMBER"] || "1",
-      xcodeproj: "Runner.xcodeproj"
+      code_sign_identity: "Apple Distribution"
     )
 
     build_app(
       workspace: "Runner.xcworkspace",
       scheme: "Runner",
+      configuration: "Release",
       export_method: "app-store",
-      output_directory: "./build",
-      output_name: "anka_101_okey.ipa",
-      xcargs: "DEVELOPMENT_TEAM='BHYTLHA722' CODE_SIGN_STYLE='Manual' PROVISIONING_PROFILE_SPECIFIER='#{profile_uuid}' CODE_SIGN_IDENTITY='iPhone Distribution'",
       export_options: {
         method: "app-store",
+        export_team_id: "BHYTLHA722",
         signingStyle: "manual",
-        teamID: "BHYTLHA722",
         provisioningProfiles: {
-          "com.anka.okey101" => profile_uuid
+          "com.antigravity.okey101.ankaOkey" => profile_name
         }
-      }
+      },
+      xcargs: "DEVELOPMENT_TEAM=BHYTLHA722",
+      output_directory: "./build_fastlane",
+      output_name: "anka_101_okey.ipa"
     )
 
-    if check_app_exists_in_asc(api_key, "com.anka.okey101")
-      upload_to_testflight(
-        api_key: api_key,
-        skip_waiting_for_build_processing: true
-      )
-    else
-      UI.important("================================================================================")
-      UI.important("IPA BAŞARIYLA DERLENDİ VE İMZALANDI! (build/anka_101_okey.ipa)")
-      UI.important("Ancak 'com.anka.okey101' Bundle ID'si için App Store Connect'te henüz bir App kaydı açılmamış.")
-      UI.important("Apple API'si yeni uygulama kaydı (New App) oluşturmaya izin vermediği için:")
-      UI.important("1. https://appstoreconnect.apple.com/apps adresine girin")
-      UI.important("2. '+' -> 'New App' tıklayın, Bundle ID listesinden 'Anka 101 Okey - com.anka.okey101' seçin.")
-      UI.important("3. Kaydettikten sonra bu GitHub Action'ı 'Re-run' yapın; doğrudan TestFlight'a düşecektir!")
-      UI.important("================================================================================")
-      UI.user_error!("App Store Connect'te 'com.anka.okey101' uygulaması henüz oluşturulmamış.")
-    end
+    upload_to_testflight(
+      ipa: "./build_fastlane/anka_101_okey.ipa",
+      skip_waiting_for_build_processing: true
+    )
   end
 end

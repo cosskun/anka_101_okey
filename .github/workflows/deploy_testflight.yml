@@ -10,7 +10,7 @@ jobs:
     name: Register Bundle ID on Apple Developer
     runs-on: ubuntu-latest
     steps:
-      - name: Register com.anka.okey101 via App Store Connect API
+      - name: Register com.antigravity.okey101.ankaOkey via App Store Connect API
         env:
           APP_STORE_CONNECT_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
           APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
@@ -22,19 +22,17 @@ jobs:
             require "net/http"
             require "json"
             require "openssl"
-            require "base64"
 
             key_id = ENV["APP_STORE_CONNECT_KEY_ID"].to_s.strip
             issuer_id = ENV["APP_STORE_CONNECT_ISSUER_ID"].to_s.strip
-            raw_key = ENV["APP_STORE_CONNECT_PRIVATE_KEY"].to_s.strip
-            pem = raw_key.include?("-----BEGIN") ? raw_key : Base64.decode64(raw_key)
+            pem = ENV["APP_STORE_CONNECT_PRIVATE_KEY"].to_s
 
             ec_key = OpenSSL::PKey::EC.new(pem)
-            token = JWT.encode({ iss: issuer_id, exp: Time.now.to_i + 1200, aud: "appstoreconnect-v1" }, ec_key, "ES256", { kid: key_id, typ: "JWT" })
+            token = JWT.encode({ iss: issuer_id, exp: Time.now.to_i + 1200, aud: "appstoreconnect-v1" }, ec_key, "ES256", { alg: "ES256", kid: key_id, typ: "JWT" })
             headers = { "Authorization" => "Bearer #{token}", "Content-Type" => "application/json" }
 
-            identifier = "com.anka.okey101"
-            name = "Anka 101 Okey"
+            identifier = "com.antigravity.okey101.ankaOkey"
+            name = "Anka Okey"
 
             uri = URI("https://api.appstoreconnect.apple.com/v1/bundleIds?filter[identifier]=#{identifier}")
             res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(Net::HTTP::Get.new(uri, headers)) }
@@ -47,14 +45,23 @@ jobs:
             end
 
             post_uri = URI("https://api.appstoreconnect.apple.com/v1/bundleIds")
-            body = { data: { type: "bundleIds", attributes: { identifier: identifier, name: name, platform: "IOS" } } }.to_json
+            body = JSON.dump({
+              data: {
+                type: "bundleIds",
+                attributes: {
+                  identifier: identifier,
+                  name: name,
+                  platform: "UNIVERSAL"
+                }
+              }
+            })
             post_res = Net::HTTP.start(post_uri.hostname, post_uri.port, use_ssl: true) do |http|
               req = Net::HTTP::Post.new(post_uri, headers)
               req.body = body
               http.request(req)
             end
             puts "Register response (#{post_res.code}): #{post_res.body}"
-            exit(post_res.code == "201" ? 0 : 1)
+            exit((post_res.is_a?(Net::HTTPSuccess) || post_res.code == "201") ? 0 : 1)
           '
 
   deploy-testflight:
@@ -108,5 +115,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: Anka101Okey-iOS-IPA
-          path: ios/build/anka_101_okey.ipa
+          path: ios/build_fastlane/anka_101_okey.ipa
           if-no-files-found: ignore
