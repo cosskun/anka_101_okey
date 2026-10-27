@@ -309,328 +309,244 @@
       font-size: 6px;
     }
 
-    .lobby-sidebar-rankings {
+    /* =========================================================================
+       2. ÇEVRİMDIŞI (OFFLINE) SADE & LÜKS ANA MENÜ TASARIMI
+       ========================================================================= */
+    .offline-lobby-center {
       position: absolute;
-      top: 14%;
-      bottom: 12%;
-      left: clamp(8px, 1.2cqw, 16px);
-      width: clamp(130px, 18cqw, 200px);
-      background: rgba(14, 20, 32, 0.92);
-      border-radius: clamp(10px, 1.5cqw, 16px);
-      border: 1.5px solid rgba(255, 215, 0, 0.25);
-      box-shadow: 0 10px 25px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.1);
-      padding: clamp(6px, 1cqh, 10px) clamp(4px, 0.6cqw, 8px);
-      display: flex;
-      flex-direction: column;
-      gap: clamp(3px, 0.6cqh, 6px);
+      top: 15%;
+      bottom: 16%;
+      left: clamp(14px, 3cqw, 36px);
+      right: clamp(14px, 3cqw, 36px);
+      display: grid;
+      grid-template-columns: 1.15fr 1fr 1fr;
+      gap: clamp(10px, 1.8cqw, 20px);
       z-index: 5;
-    }
-    .ranking-header {
-      font-size: clamp(9px, 1.5cqh, 11px);
-      font-weight: 900;
-      color: #ffca28;
-      text-transform: uppercase;
-      letter-spacing: 0.6px;
-      border-bottom: 1px solid rgba(255,255,255,0.12);
-      padding-bottom: clamp(3px, 0.6cqh, 6px);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .ranking-list {
-      flex: 1;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: clamp(3px, 0.5cqh, 5px);
-      padding-right: 2px;
-    }
-    .ranking-list::-webkit-scrollbar {
-      width: 3px;
-    }
-    .ranking-list::-webkit-scrollbar-thumb {
-      background: rgba(255, 215, 0, 0.35);
-      border-radius: 4px;
-    }
-    .rank-item {
-      display: flex;
-      align-items: center;
-      gap: clamp(3px, 0.5cqw, 6px);
-      padding: clamp(2px, 0.4cqh, 4px) clamp(4px, 0.6cqw, 6px);
-      background: rgba(255,255,255,0.04);
-      border-radius: 8px;
-      font-size: clamp(9px, 1.5cqh, 11px);
-      cursor: pointer;
-      border: 1px solid transparent;
-      transition: all 0.15s ease;
-    }
-    .rank-item:hover {
-      background: rgba(255,255,255,0.12);
-      border-color: rgba(255, 215, 0, 0.4);
-      transform: translateX(2px);
-    }
-    .rank-item.is-me {
-      background: linear-gradient(90deg, rgba(255, 179, 0, 0.22) 0%, rgba(255, 215, 0, 0.08) 100%);
-      border: 1px solid rgba(255, 215, 0, 0.65);
-      box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
-    }
-    .rank-num {
-      width: clamp(14px, 2.5cqh, 18px);
-      height: clamp(14px, 2.5cqh, 18px);
-      border-radius: 50%;
-      color: #000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 900;
-      font-size: clamp(7.5px, 1.2cqh, 9px);
-      flex-shrink: 0;
-    }
-    .rank-num.gold { background: linear-gradient(135deg, #ffd700, #ff8f00); color: #000; }
-    .rank-num.silver { background: linear-gradient(135deg, #eceff1, #90a4ae); color: #000; }
-    .rank-num.bronze { background: linear-gradient(135deg, #d7ccc8, #8d6e63); color: #fff; }
-    .rank-num.normal { background: rgba(255,255,255,0.12); color: #94a3b8; }
-    .rank-avatar {
-      font-size: clamp(10px, 1.8cqh, 14px);
-      flex-shrink: 0;
-    }
-    .rank-info {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      line-height: 1.15;
-    }
-    .rank-name {
-      font-weight: 800;
-      color: #f1f5f9;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      font-size: clamp(8.5px, 1.4cqh, 10.5px);
-    }
-    .rank-chips {
-      font-size: clamp(7.5px, 1.2cqh, 9px);
-      color: #fbbf24;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      gap: 2px;
+      align-items: stretch;
     }
 
-    .lobby-modes-container {
-      position: absolute;
-      top: 14%;
-      bottom: 15%;
-      right: clamp(8px, 1.2cqw, 16px);
-      left: clamp(145px, 20cqw, 225px);
-      display: flex;
-      flex-direction: column;
-      gap: clamp(6px, 1.2cqh, 10px);
-      z-index: 5;
-    }
-
-    /* ÜST SPLIT HERO ALANI (ORTA GÖRSEL + SAĞDA OTOMATİK EŞLEŞME) */
-    .lobby-hero-row {
-      flex: 1.35;
-      display: flex;
-      gap: clamp(8px, 1.2cqw, 14px);
-      min-height: 0;
-    }
-
-    .lobby-art-showcase {
-      flex: 1.45;
-      border-radius: clamp(10px, 1.8cqw, 18px);
-      border: 2px solid #ffd54f;
-      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.7), inset 0 0 15px rgba(255, 215, 0, 0.2);
+    .offline-hero-card {
+      border-radius: clamp(14px, 2cqw, 22px);
+      border: 2px solid rgba(255, 215, 0, 0.65);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.75), inset 0 0 20px rgba(255, 215, 0, 0.15);
       position: relative;
       overflow: hidden;
       background: url('assets/lobby_hero_banner.jpg') center center / cover no-repeat;
       display: flex;
       flex-direction: column;
-      justify-content: flex-end;
-      padding: clamp(6px, 1.2cqw, 12px);
+      justify-content: space-between;
+      padding: clamp(12px, 2cqw, 20px);
       cursor: pointer;
       transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
-    .lobby-art-showcase:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 28px rgba(0,0,0,0.85), 0 0 16px rgba(255,215,0,0.4);
+    .offline-hero-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 16px 34px rgba(0,0,0,0.85), 0 0 20px rgba(255,215,0,0.45);
     }
-    .lobby-art-showcase::after {
+    .offline-hero-card::after {
       content: "";
       position: absolute;
       inset: 0;
-      background: linear-gradient(180deg, rgba(0,0,0,0) 30%, rgba(13, 2, 33, 0.9) 100%);
+      background: linear-gradient(180deg, rgba(10, 15, 28, 0.35) 0%, rgba(10, 15, 28, 0.92) 100%);
       pointer-events: none;
     }
-    .art-showcase-text {
+    .offline-badge-pill {
+      position: relative;
+      z-index: 2;
+      align-self: flex-start;
+      background: rgba(16, 185, 129, 0.22);
+      border: 1px solid #10b981;
+      color: #6ee7b7;
+      font-size: clamp(9px, 1.4cqh, 11.5px);
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 20px;
+      backdrop-filter: blur(6px);
+    }
+    .offline-hero-content {
       position: relative;
       z-index: 2;
       display: flex;
       flex-direction: column;
-      gap: 2px;
+      gap: 6px;
     }
-    .art-showcase-text h3 {
-      font-size: clamp(12px, 2.4cqh, 17px);
+    .offline-hero-content h2 {
+      margin: 0;
+      font-size: clamp(16px, 3cqh, 24px);
       font-weight: 900;
       color: #fff;
-      text-shadow: 0 2px 6px rgba(0,0,0,0.9);
-      letter-spacing: 0.5px;
-      display: flex;
-      align-items: center;
-      gap: 4px;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.9);
     }
-    .art-showcase-text p {
-      font-size: clamp(8px, 1.4cqh, 10.5px);
-      color: #ffe082;
-      font-weight: 700;
-      text-shadow: 0 1px 3px rgba(0,0,0,0.9);
+    .offline-hero-content p {
+      margin: 0;
+      font-size: clamp(9.5px, 1.6cqh, 12px);
+      color: #cbd5e1;
+      line-height: 1.35;
     }
-
-    .auto-match-card-right {
-      flex: 1.05;
-      background: linear-gradient(135deg, #e65100 0%, #ff8f00 50%, #ffa000 100%);
-      border-radius: clamp(10px, 1.8cqw, 18px);
-      border: 2px solid #ffe082;
-      box-shadow: 0 10px 25px rgba(230, 81, 0, 0.6), inset 0 0 12px rgba(255, 255, 255, 0.35);
-      display: flex;
-      flex-direction: column;
+    .offline-play-now-btn {
+      margin-top: 4px;
+      background: linear-gradient(135deg, #00e676 0%, #00b0ff 100%);
+      border: none;
+      color: #042f2e;
+      font-size: clamp(11px, 1.9cqh, 14px);
+      font-weight: 900;
+      padding: clamp(7px, 1.3cqh, 11px) 16px;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(0, 230, 118, 0.45);
+      display: inline-flex;
       align-items: center;
       justify-content: center;
-      padding: clamp(6px, 1cqw, 12px);
-      cursor: pointer;
-      position: relative;
-      overflow: hidden;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-      gap: clamp(3px, 0.8cqh, 6px);
-      text-align: center;
-    }
-    .auto-match-card-right:hover {
-      transform: translateY(-2px) scale(1.02);
-      box-shadow: 0 14px 30px rgba(230, 81, 0, 0.8);
-    }
-    .auto-match-header {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      font-size: clamp(11px, 2.1cqh, 15px);
-      font-weight: 900;
-      color: #fff;
-      text-shadow: 0 2px 4px rgba(0,0,0,0.6);
-    }
-    .auto-match-desc {
-      font-size: clamp(7.5px, 1.3cqh, 10px);
-      color: #fff8e1;
-      line-height: 1.2;
-    }
-    .auto-match-btn {
-      background: linear-gradient(180deg, #00e676 0%, #00a152 100%);
-      border: 2px solid #b9f6ca;
-      color: #003314;
-      font-size: clamp(9.5px, 1.7cqh, 13px);
-      font-weight: 900;
-      padding: clamp(4px, 0.8cqh, 7px) clamp(10px, 1.6cqw, 18px);
-      border-radius: 16px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
-      cursor: pointer;
-      transition: transform 0.15s ease;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-    .auto-match-btn:hover {
-      transform: scale(1.06);
+      gap: 6px;
     }
 
-    .sub-modes-grid {
-      flex: 1;
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: clamp(5px, 1cqw, 10px);
-    }
-    .mode-sub-card {
-      background: rgba(18, 24, 38, 0.85);
-      border: 1.5px solid rgba(255, 255, 255, 0.15);
-      border-radius: clamp(8px, 1.4cqw, 16px);
+    .offline-mode-card {
+      background: linear-gradient(160deg, rgba(20, 29, 47, 0.94) 0%, rgba(11, 17, 30, 0.96) 100%);
+      border: 1.5px solid rgba(255, 255, 255, 0.14);
+      border-radius: clamp(14px, 2cqw, 22px);
+      padding: clamp(12px, 2cqw, 20px);
       display: flex;
       flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: clamp(2px, 0.6cqh, 6px);
+      justify-content: space-between;
       cursor: pointer;
       transition: all 0.2s ease;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+      position: relative;
+      overflow: hidden;
     }
-    .mode-sub-card:hover {
-      border-color: #ffb300;
-      background: rgba(30, 40, 60, 0.95);
+    .offline-mode-card:hover {
       transform: translateY(-3px);
+      border-color: #ffd54f;
+      box-shadow: 0 14px 30px rgba(0,0,0,0.8), 0 0 16px rgba(255, 215, 0, 0.25);
     }
-    .mode-icon {
-      font-size: clamp(16px, 3.2cqh, 24px);
+    .offline-mode-card.folded-card {
+      border-color: rgba(245, 158, 11, 0.45);
+      background: linear-gradient(160deg, rgba(38, 24, 14, 0.94) 0%, rgba(17, 12, 8, 0.96) 100%);
+    }
+    .offline-mode-icon-box {
+      width: clamp(36px, 6.5cqh, 50px);
+      height: clamp(36px, 6.5cqh, 50px);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.12);
       display: flex;
       align-items: center;
       justify-content: center;
+      font-size: clamp(20px, 3.6cqh, 28px);
     }
-    .mode-name {
-      font-size: clamp(8.5px, 1.6cqh, 12px);
-      font-weight: bold;
+    .offline-mode-title {
+      font-size: clamp(14px, 2.4cqh, 19px);
+      font-weight: 900;
       color: #fff;
+      margin: 6px 0 3px 0;
+    }
+    .offline-mode-desc {
+      font-size: clamp(9px, 1.5cqh, 11.5px);
+      color: #94a3b8;
+      line-height: 1.35;
+      margin: 0;
+    }
+    .offline-mode-tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin: 6px 0;
+    }
+    .offline-mode-tag {
+      font-size: clamp(8px, 1.25cqh, 10px);
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.06);
+      color: #cbd5e1;
+    }
+    .offline-mode-action-btn {
+      width: 100%;
+      padding: clamp(6px, 1.2cqh, 10px);
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+      font-size: clamp(10px, 1.7cqh, 12.5px);
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .offline-mode-card:hover .offline-mode-action-btn {
+      background: #ffd54f;
+      color: #0f172a;
+      border-color: #ffd54f;
     }
 
-    /* BÜYÜTÜLMÜŞ LÜKS ALT DOCK ALANI */
+    /* SADE ALT İSTATİSTİK VE ÖDÜL ÇUBUĞU */
     .lobby-bottom-bar {
       position: absolute;
       bottom: 0;
       left: 0;
       width: 100%;
-      height: 14%;
-      background: linear-gradient(0deg, rgba(8, 12, 20, 0.98) 0%, rgba(14, 20, 32, 0.9) 70%, rgba(0,0,0,0) 100%);
-      border-top: 1px solid rgba(255, 215, 0, 0.25);
+      height: 13.5%;
+      background: linear-gradient(0deg, rgba(8, 12, 20, 0.98) 0%, rgba(14, 20, 32, 0.9) 80%, rgba(0,0,0,0) 100%);
+      border-top: 1px solid rgba(255, 215, 0, 0.2);
       display: flex;
       align-items: center;
-      justify-content: space-around;
-      padding: 0 clamp(8px, 2cqw, 24px);
+      justify-content: space-between;
+      padding: 0 clamp(14px, 3cqw, 36px);
       z-index: 10;
       box-sizing: border-box;
+      gap: 10px;
+    }
+    .offline-stats-strip {
+      display: flex;
+      align-items: center;
+      gap: clamp(8px, 1.5cqw, 16px);
+    }
+    .offline-stat-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 4px 10px;
+      border-radius: 10px;
+      font-size: clamp(9px, 1.5cqh, 11.5px);
+      color: #cbd5e1;
+      font-weight: 700;
+    }
+    .offline-stat-pill b {
+      color: #ffd54f;
+      font-weight: 900;
+    }
+    .offline-bottom-actions {
+      display: flex;
+      align-items: center;
+      gap: clamp(6px, 1.2cqw, 12px);
     }
     .dock-btn {
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 2px;
-      padding: clamp(3px, 0.6cqh, 6px) clamp(6px, 1.4cqw, 16px);
-      border-radius: 12px;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      color: #cbd5e1;
+      gap: 6px;
+      padding: clamp(4px, 0.8cqh, 7px) clamp(10px, 1.5cqw, 16px);
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #e2e8f0;
       cursor: pointer;
       transition: all 0.2s ease;
-      min-width: clamp(50px, 8cqw, 85px);
       position: relative;
+      font-size: clamp(9.5px, 1.5cqh, 12px);
+      font-weight: 800;
     }
     .dock-btn:hover {
       background: rgba(255, 215, 0, 0.18);
       border-color: #ffd54f;
       color: #ffd54f;
-      transform: translateY(-3px);
-      box-shadow: 0 6px 16px rgba(0,0,0,0.5);
-    }
-    .dock-btn .dock-icon {
-      font-size: clamp(16px, 3.4cqh, 24px);
-      line-height: 1;
-    }
-    .dock-btn .dock-label {
-      font-size: clamp(8.5px, 1.5cqh, 11px);
-      font-weight: 800;
-      letter-spacing: 0.3px;
+      transform: translateY(-2px);
     }
     .dock-badge-dot {
       position: absolute;
-      top: -3px;
-      right: -3px;
+      top: -4px;
+      right: -4px;
       background: linear-gradient(135deg, #ff1744, #d50000);
       color: #fff;
       font-size: clamp(7px, 1.2cqh, 9px);
@@ -638,7 +554,6 @@
       padding: 1px 4px;
       border-radius: 8px;
       border: 1px solid #fff;
-      box-shadow: 0 0 6px rgba(255,23,68,0.8);
       line-height: 1;
     }
 
@@ -3030,32 +2945,30 @@
     <div class="screen-container">
 
       <!-- =========================================================================
-           1. ANKA 101 OKEY - LOBİ EKRANI (ANA SAYFA)
+           1. ANKA 101 OKEY - ÇEVRİMDIŞI (BOTLARA KARŞI) SADE ANA EKRAN
            ========================================================================= -->
       <div class="screen-view active" id="lobby-screen">
         
         <div class="lobby-bg-sun"></div>
         <div class="lobby-sea-waves"></div>
 
-        <!-- Üst Çubuk: Profil, İkramlar ve Bakiyeler -->
+        <!-- Üst Çubuk: Oyuncu Profili, Ücretsiz Çip Ödülleri, Çip Bakiyesi ve Ses -->
         <div class="lobby-topbar">
-          <div class="user-profile-badge" onclick="openProfile(0)" title="Profilini Gör">
+          <div class="user-profile-badge" onclick="openProfile(0)" title="Profilini ve İstatistiklerini Gör">
             <div class="user-avatar-img">👑</div>
             <div>
-              <div class="user-name-title">COİN SULTANI</div>
-              <div class="user-vip-tag">VIP 5</div>
+              <div class="user-name-title">OYUNCU</div>
+              <div style="font-size: clamp(8px, 1.3cqh, 10px); color: #94a3b8; font-weight: 700;">✏️ Profil & İstatistik</div>
             </div>
           </div>
 
-          <!-- Canlı Masa İkramları ve Hızlı Etkinlikler -->
-          <div style="display:flex; align-items:center; gap:6px;">
-            <!-- 4 Saatlik Çay İkramı Butonu -->
-            <div class="lobby-tea-pill ready" id="lobby-tea-btn" onclick="claimHourlyTeaReward()" title="Masa İkramı (Her 4 Saatte 1.000 Çip)">
+          <!-- Çevrimdışı Ücretsiz Çip Desteği (Çay İkramı & Günlük Şans Çarkı) -->
+          <div style="display:flex; align-items:center; gap:8px;">
+            <div class="lobby-tea-pill ready" id="lobby-tea-btn" onclick="claimHourlyTeaReward()" title="Ücretsiz Çip Desteği (Her 4 Saatte 1.000 Çip)">
               <span style="font-size:14px;">☕</span>
-              <span id="lobby-tea-timer-text" style="color:#ffd700;">1.000 Çip Al!</span>
+              <span id="lobby-tea-timer-text" style="color:#ffd700;">+1.000 Çip</span>
             </div>
 
-            <!-- Günlük Şans Çarkı Butonu -->
             <div class="lobby-wheel-pill ready" id="lobby-wheel-topbar-btn" onclick="openLuckyWheelModal()" title="Günlük Ücretsiz Şans Çarkı">
               <span style="font-size:14px;">🎡</span>
               <span id="lobby-wheel-topbar-text" style="color:#f472b6;">Şans Çarkı</span>
@@ -3063,103 +2976,85 @@
             </div>
           </div>
 
-          <div class="top-currencies">
-            <div class="currency-pill">
+          <div class="top-currencies" style="align-items:center;">
+            <div class="currency-pill" title="Oyun İçi Çip Bakiyeniz">
               <span class="ico-gold-coin"></span> <span id="lobby-coins-val">20.000</span>
-              <div class="add-btn" onclick="addCoins()">+</div>
+              <div class="add-btn" onclick="addCoins()" title="+50.000 Ücretsiz Çip Yükle">+</div>
             </div>
-            <div class="currency-pill">
-              <span>💎</span> <span>4.250</span>
-              <div class="add-btn" onclick="showInfoPopup('💎 Elmas Mağazası', 'Elmas paketleri ve VIP ayrıcalıkları yakında açılacaktır.')">+</div>
-            </div>
+            <button class="btn-sound-toggle" id="lobby-sound-btn" onclick="toggleSound()" title="Sesi Aç / Kapat" style="position:static; width:30px; height:30px; font-size:14px;">🔊</button>
           </div>
         </div>
 
-        <!-- Sol Sıralama Tablosu -->
-        <div class="lobby-sidebar-rankings">
-          <div class="ranking-header">🏆 Anka Sıralaması</div>
-          <div class="ranking-list" id="lobby-ranking-list">
-            <!-- Dinamik Gerçek Kayıtlı Kullanıcılar Buraya Render Edilecek -->
-          </div>
-        </div>
-
-        <!-- Sağ Ana Oyun Modları -->
-        <div class="lobby-modes-container">
+        <!-- Orta Ana Seçim Alanı: 3 Net Çevrimdışı (Botlara Karşı) Oyun Kartı -->
+        <div class="offline-lobby-center">
           
-          <!-- ÜST SPLIT HERO ALANI (ORTA ÖZEL ANKA 101 OKEY GÖRSELİ + SAĞ OTOMATİK EŞLEŞME KARTI) -->
-          <div class="lobby-hero-row">
-            
-            <!-- Ortadaki Tema Görseli Kartı -->
-            <div class="lobby-art-showcase" onclick="openTableSetupModal('Anka 101 Okey')" title="Anka 101 Okey Arenası">
-              <div class="art-showcase-text">
-                <h3>🔥 ANKA 101 OKEY</h3>
-                <p>Canlı Masalar • VIP Turnuvalar • Büyük Ödüller</p>
-              </div>
+          <!-- 1. Kart: Hızlı Başla (Tek Tıkla Anında Botlarla Masaya Otur) -->
+          <div class="offline-hero-card" onclick="quickStartOfflineGame()" title="Ayarlarla uğraşmadan hemen botlarla oyuna başla">
+            <span class="offline-badge-pill">🤖 ÇEVRİMDIŞI • 3 YAPAY ZEKA BOT</span>
+            <div class="offline-hero-content">
+              <h2>🔥 ANKA 101 OKEY</h2>
+              <p>İnternet bağlantısı gerekmeden gelişmiş yapay zeka botlara karşı hemen masaya otur!</p>
+              <button class="offline-play-now-btn">⚡ HEMEN OYNA ▶</button>
             </div>
-
-            <!-- Sağdaki Kompakt Otomatik Eşleşme Kartı -->
-            <div class="auto-match-card-right" onclick="openTableSetupModal('Hızlı Eşleşme')" title="Hemen Masaya Otur">
-              <div class="auto-match-header">
-                <span>🎲</span>
-                <span>OTOMATİK EŞLEŞME</span>
-              </div>
-              <p class="auto-match-desc">Hemen canlı rakiplerle masaya otur!</p>
-              <button class="auto-match-btn">HEMEN OYNA ▶</button>
-            </div>
-
           </div>
 
-          <!-- 4'lü Alt Modlar -->
-          <div class="sub-modes-grid">
-            <div class="mode-sub-card" onclick="openTableSetupModal('Yarışma Turnuvası')">
-              <span class="mode-icon">🏆</span>
-              <span class="mode-name">Yarışma</span>
+          <!-- 2. Kart: Klasik 101 Okey (Katlamasız) -->
+          <div class="offline-mode-card" onclick="openOfflineModeSetup(false)" title="Standart 101 Barajlı Masa Kur">
+            <div>
+              <div class="offline-mode-icon-box">🎯</div>
+              <h3 class="offline-mode-title">Klasik 101 Okey</h3>
+              <p class="offline-mode-desc">Standart 101 puan barajlı klasik kurallar. İstediğin el sayısını ve masa bahsini seçerek botlara karşı oyna.</p>
+              <div class="offline-mode-tag-list">
+                <span class="offline-mode-tag">📊 Sabit 101 Baraj</span>
+                <span class="offline-mode-tag">👥 5 Çift Açma</span>
+                <span class="offline-mode-tag">🤖 3 Bot Rakip</span>
+              </div>
             </div>
-            <div class="mode-sub-card" onclick="openTableSetupModal('VIP Masa Aç')">
-              <span class="mode-icon">🛋️</span>
-              <span class="mode-name">Masa Aç</span>
+            <button class="offline-mode-action-btn">Klasik Masa Kur ⚙️</button>
+          </div>
+
+          <!-- 3. Kart: Katlamalı 101 Okey -->
+          <div class="offline-mode-card folded-card" onclick="openOfflineModeSetup(true)" title="Katlamalı 101 Barajlı Masa Kur">
+            <div>
+              <div class="offline-mode-icon-box">🔥</div>
+              <h3 class="offline-mode-title" style="color:#ffd54f;">Katlamalı 101 Okey</h3>
+              <p class="offline-mode-desc">Her el açıldığında masa barajı açılan puanın +1 üzerine çıkar! Daha yüksek rekabet ve strateji.</p>
+              <div class="offline-mode-tag-list">
+                <span class="offline-mode-tag" style="color:#fcd34d;">📈 Artan Baraj</span>
+                <span class="offline-mode-tag">👑 Çift Katlama</span>
+                <span class="offline-mode-tag">🤖 3 Bot Rakip</span>
+              </div>
             </div>
-            <div class="mode-sub-card" onclick="openTableSetupModal('Jeton Turnuvası')">
-              <span class="mode-icon"><span class="ico-gold-coin lg"></span></span>
-              <span class="mode-name">Jeton</span>
-            </div>
-            <div class="mode-sub-card" onclick="showInfoPopup('🛡️ Klan Salonu', '<b>Klan:</b> Çöl Gülü (Seviye 8)<br>Klan liginde 1. sıradasınız!')">
-              <span class="mode-icon">🛡️</span>
-              <span class="mode-name">Klan</span>
-            </div>
+            <button class="offline-mode-action-btn" style="border-color:rgba(255,215,0,0.4); color:#ffd54f;">Katlamalı Masa Kur ⚙️</button>
           </div>
 
         </div>
 
-        <!-- BÜYÜTÜLMÜŞ LÜKS ALT NAVİGASYON DOCK ALANI -->
+        <!-- Alt Çubuk: Kişisel Oyun İstatistikleri & Günlük Hediye / Kurallar -->
         <div class="lobby-bottom-bar">
-          <div class="dock-btn" onclick="showInfoPopup('🎒 Oyuncu Çantası', 'Çantanızda <b>3 Özel Istaka Teması</b> ve <b>12 Emoji Paketi</b> bulunmaktadır.')">
-            <span class="dock-icon">🎒</span>
-            <span class="dock-label">Çanta</span>
+          <div class="offline-stats-strip">
+            <div class="offline-stat-pill">
+              <span>🎮 Oynanan:</span>
+              <b id="lobby-stat-games">0</b>
+            </div>
+            <div class="offline-stat-pill">
+              <span>🏆 Galibiyet:</span>
+              <b id="lobby-stat-wins" style="color:#00e676;">0</b>
+            </div>
+            <div class="offline-stat-pill">
+              <span>📈 Başarı:</span>
+              <b id="lobby-stat-winrate" style="color:#38bdf8;">%0</b>
+            </div>
           </div>
-          <div class="dock-btn" onclick="openDailyLoginModal()" title="7 Günlük Giriş Takvimi">
-            <span class="dock-badge-dot" id="dock-daily-badge">1</span>
-            <span class="dock-icon">🎁</span>
-            <span class="dock-label">Giriş Hediyesi</span>
-          </div>
-          <div class="dock-btn" onclick="openLuckyWheelModal()" title="Günlük Şans Çarkı">
-            <span class="dock-badge-dot" id="dock-wheel-badge" style="background:#ec4899;">🎡</span>
-            <span class="dock-icon">🎡</span>
-            <span class="dock-label">Şans Çarkı</span>
-          </div>
-          <div class="dock-btn" onclick="showInfoPopup('📋 Günlük Görevler', '• 3 Seri Aç: (2/3 tamamlandı)<br>• Çiftten Bit: (0/1)<br>• 5 El Kazan: (4/5)')">
-            <span class="dock-badge-dot">2/3</span>
-            <span class="dock-icon">📋</span>
-            <span class="dock-label">Görevler</span>
-          </div>
-          <div class="dock-btn" onclick="showInfoPopup('👥 Arkadaş Listesi', '<b>4 Arkadaşınız Çevrimiçi:</b><br>• Kadriye Yılmaz (Oyunda)<br>• Veli Karaca (Lobide)<br>• Gül Uysal (Oyunda)<br>• Mehmet Kaya (Boşta)')">
-            <span class="dock-badge-dot">4</span>
-            <span class="dock-icon">👥</span>
-            <span class="dock-label">Arkadaşlar</span>
-          </div>
-          <div class="dock-btn" onclick="showInfoPopup('🛒 VIP Mağazası', 'Özel taş tasarımları, kadife masa örtüleri ve efektler mağazada!')">
-            <span class="dock-icon">🛒</span>
-            <span class="dock-label">Mağaza</span>
+
+          <div class="offline-bottom-actions">
+            <div class="dock-btn" onclick="openDailyLoginModal()" title="7 Günlük Giriş Ödülü">
+              <span class="dock-badge-dot" id="dock-daily-badge">1</span>
+              <span>🎁 Günlük Ödül</span>
+            </div>
+            <div class="dock-btn" onclick="showOfflineRulesPopup()" title="101 Okey Kuralları">
+              <span>📖 Kurallar</span>
+            </div>
           </div>
         </div>
 
@@ -3341,7 +3236,7 @@
     </div>
   </div>
 
-  <!-- PROFİL İNCELEME MODALI -->
+  <!-- PROFİL İNCELEME MODALI (ÇEVRİMDIŞI YEREL PROFİL) -->
   <div class="modal-overlay" id="profile-modal" onclick="closeProfile(event)">
     <div class="profile-card-popup" onclick="event.stopPropagation()">
       <div class="prof-header">
@@ -3353,13 +3248,12 @@
           <div class="prof-avatar-big" id="modal-avatar">👑</div>
           <div class="prof-user-info">
             <div class="prof-name-row">
-              <h3 id="modal-name" style="margin:0; font-size:15px; color:#fff;">COİN SULTANI</h3>
-              <span class="prof-vip-badge" id="modal-vip">VIP 5</span>
+              <h3 id="modal-name" style="margin:0; font-size:15px; color:#fff;">OYUNCU</h3>
+              <span class="prof-vip-badge" id="modal-vip">🤖 Çevrimdışı</span>
             </div>
-            <p style="font-size:11px; color:#94a3b8; margin:2px 0 0 0;">
-              <span id="modal-city">📍 İstanbul</span> • <span id="modal-clan" style="color:#38bdf8; font-weight:bold;">Çöl Gülü</span>
+            <p style="font-size:11px; color:#94a3b8; margin:4px 0 0 0;" id="modal-role-desc">
+              Yerel Oyuncu Profili
             </p>
-            <span style="font-size:10px; color:#64748b;" id="modal-id">ID: ANKA-1001</span>
           </div>
         </div>
 
@@ -3373,8 +3267,6 @@
           <div style="font-size:11px; font-weight:800; color:#cbd5e1;">🎖️ Başarı Rozetleri</div>
           <div style="display:flex; gap:6px; flex-wrap:wrap;" id="modal-badges-list">
             <span class="prof-badge-pill">🔥 101 Ustası</span>
-            <span class="prof-badge-pill">👑 Çip Zengini</span>
-            <span class="prof-badge-pill">⚡ Seri Bitirici</span>
           </div>
         </div>
 
@@ -3393,13 +3285,11 @@
             <div class="avatar-pick-item" onclick="selectEditAvatar('🌸')">🌸</div>
             <div class="avatar-pick-item" onclick="selectEditAvatar('👩')">👩</div>
           </div>
-          <input type="text" class="prof-input" id="edit-prof-clan" placeholder="Klan Adı" maxlength="16">
-          <input type="text" class="prof-input" id="edit-prof-city" placeholder="Şehir (Örn: İstanbul)" maxlength="16">
           <button class="prof-edit-btn" onclick="saveUserProfile()" style="background:linear-gradient(135deg,#10b981,#059669);">💾 Kaydet</button>
         </div>
 
         <div class="prof-actions-row" id="prof-my-actions">
-          <button class="prof-edit-btn" id="btn-toggle-edit" onclick="toggleEditProfile()">✏️ Profili Düzenle</button>
+          <button class="prof-edit-btn" id="btn-toggle-edit" onclick="toggleEditProfile()">✏️ İsim & Avatar Değiştir</button>
         </div>
       </div>
     </div>
@@ -3971,36 +3861,6 @@
     }
 
     function renderLeaderboard() {
-      const listEl = document.getElementById('lobby-ranking-list');
-      if (!listEl) return;
-
-      const sorted = [...registeredUsers].sort((a, b) => b.coins - a.coins);
-
-      let html = '';
-      sorted.forEach((u, index) => {
-        const rank = index + 1;
-        let rankClass = 'normal';
-        let rankBadge = rank;
-        if (rank === 1) { rankClass = 'gold'; rankBadge = '🥇'; }
-        else if (rank === 2) { rankClass = 'silver'; rankBadge = '🥈'; }
-        else if (rank === 3) { rankClass = 'bronze'; rankBadge = '🥉'; }
-
-        const isMeClass = u.isMe ? ' is-me' : '';
-        const formattedCoins = formatChipsShort(u.coins);
-
-        html += `
-          <div class="rank-item${isMeClass}" onclick="openProfile('${u.id}')" title="${u.name} Profilini Gör">
-            <div class="rank-num ${rankClass}">${rankBadge}</div>
-            <div class="rank-avatar">${u.icon}</div>
-            <div class="rank-info">
-              <span class="rank-name">${u.name} ${u.isMe ? '<b style="color:#ffd700; font-size:9px;">(Sen)</b>' : ''}</span>
-              <span class="rank-chips"><span class="ico-gold-coin sm"></span> ${formattedCoins}</span>
-            </div>
-          </div>
-        `;
-      });
-
-      listEl.innerHTML = html;
       updateMyUserUI();
     }
 
@@ -4009,14 +3869,22 @@
       if (!me) return;
 
       const topName = document.querySelector('.user-name-title');
-      const topVip = document.querySelector('.user-vip-tag');
       const topAvatar = document.querySelector('.user-avatar-img');
       const topCoins = document.getElementById('lobby-coins-val');
 
       if (topName) topName.innerText = me.name;
-      if (topVip) topVip.innerText = `VIP ${me.vip}`;
       if (topAvatar) topAvatar.innerText = me.icon;
       if (topCoins) topCoins.innerText = me.coins.toLocaleString('tr-TR');
+
+      const statGames = document.getElementById('lobby-stat-games');
+      const statWins = document.getElementById('lobby-stat-wins');
+      const statWinrate = document.getElementById('lobby-stat-winrate');
+      const games = me.games || 0;
+      const wins = me.wins || 0;
+      const wr = games > 0 ? Math.round((wins / games) * 100) : 0;
+      if (statGames) statGames.innerText = games.toLocaleString('tr-TR');
+      if (statWins) statWins.innerText = wins.toLocaleString('tr-TR');
+      if (statWinrate) statWinrate.innerText = `%${wr}`;
 
       const pod0Avatar = document.querySelector('#pod-player-0 .pod-avatar-ring span:first-child');
       const pod0Name = document.querySelector('#pod-player-0 .pod-name');
@@ -4158,6 +4026,41 @@
     /* =========================================================================
        MASA AYARLAMA VE ÇOKLU TUR (MULTI-ROUND) YÖNETİMİ
        ========================================================================= */
+    function openOfflineModeSetup(folded) {
+      selectSetupFoldMode(!!folded);
+      openTableSetupModal(folded ? 'Katlamalı 101 Okey (Botlara Karşı)' : 'Klasik 101 Okey (Botlara Karşı)');
+    }
+
+    function quickStartOfflineGame() {
+      updateSetupBetsAvailability();
+      const me = getMyUser();
+      if (me && me.coins < 1000) {
+        me.coins += 10000;
+        userCoins = me.coins;
+        saveRegisteredUsers();
+        updateMyUserUI();
+      }
+      selectSetupFoldMode(false);
+      setupSelectedRounds = 1;
+      setupTargetMode = 'Klasik 101 Okey (Hızlı Masa)';
+      currentRound = 1;
+      totalRounds = 1;
+      cumulativePenalties = [0, 0, 0, 0];
+      tournamentBestFinish = 'normal_finish';
+      tournamentInstantBonusesEarned = 0;
+      startTableGame(setupTargetMode, setupSelectedBet || 1000);
+    }
+
+    function showOfflineRulesPopup() {
+      showInfoPopup('📖 101 Okey Oyun Kuralları',
+        '• <b>El Açma Barajı:</b> Standart modda perlerinizin toplamı en az <b>101</b> (veya en az <b>5 Çift</b>) olmalıdır.<br>' +
+        '• <b>Katlamalı Mod:</b> Her el açıldığında yeni baraj, masadaki en yüksek açılış puanının <b>+1</b> fazlası olur (veya en son açılan çift sayısının +1 fazlası).<br>' +
+        '• <b>Son Taş Kuralı:</b> El açarken veya taş işlerken ıstakanızda yere atmak için <b>en az 1 taş</b> kalmalıdır.<br>' +
+        '• <b>Yandan Taş Alma:</b> Sol oyuncunun attığı taşı sadece elinizi açtıysanız veya o taşla birlikte 101 barajını açabiliyorsanız alabilirsiniz ve o tur içinde mutlaka kullanmalısınız.<br>' +
+        '• <b>İşlek Taş / Okey Cezası:</b> Masadaki perlere işlenebilen bir taşı veya Okey\'i yere atmak <b>+101 ceza puanı</b> yazar.'
+      );
+    }
+
     function openTableSetupModal(mode = 'Anka 101 Okey') {
       setupTargetMode = mode;
       const titleEl = document.getElementById('setup-modal-game-mode');
@@ -6557,24 +6460,20 @@
 
       // Modal Bilgilerini Doldur
       const headerTitle = document.getElementById('prof-modal-header-title');
-      if (headerTitle) headerTitle.innerText = u.isMe ? '👑 Profilim (Kullanıcı Hesabı)' : `👤 ${u.name} Profili`;
+      if (headerTitle) headerTitle.innerText = u.isMe ? '👑 Oyuncu Profilim' : `🤖 ${u.name} (Yapay Zeka Bot)`;
 
       const modalName = document.getElementById('modal-name');
       const modalAvatar = document.getElementById('modal-avatar');
       const modalVip = document.getElementById('modal-vip');
-      const modalClan = document.getElementById('modal-clan');
-      const modalCity = document.getElementById('modal-city');
-      const modalId = document.getElementById('modal-id');
+      const modalRoleDesc = document.getElementById('modal-role-desc');
       const modalGames = document.getElementById('modal-games');
       const modalWinrate = document.getElementById('modal-winrate');
       const modalCoins = document.getElementById('modal-coins');
 
       if (modalName) modalName.innerText = u.name;
       if (modalAvatar) modalAvatar.innerText = u.icon;
-      if (modalVip) modalVip.innerText = `VIP ${u.vip}`;
-      if (modalClan) modalClan.innerText = u.clan || 'Klan Yok';
-      if (modalCity) modalCity.innerText = `📍 ${u.city || 'Türkiye'}`;
-      if (modalId) modalId.innerText = `ID: ${u.id}`;
+      if (modalVip) modalVip.innerText = u.isMe ? '👤 Siz' : '🤖 Bot';
+      if (modalRoleDesc) modalRoleDesc.innerText = u.isMe ? 'Çevrimdışı Yerel Oyuncu Profili' : 'Gelişmiş 101 Okey Yapay Zeka Rakibi';
       if (modalGames) modalGames.innerText = (u.games || 0).toLocaleString('tr-TR');
 
       const winRate = (u.games && u.games > 0) ? Math.round((u.wins / u.games) * 1000) / 10 : 0;
@@ -6587,7 +6486,7 @@
         if (u.badges && u.badges.length > 0) {
           badgesListEl.innerHTML = u.badges.map(b => `<span class="prof-badge-pill">${b}</span>`).join('');
         } else {
-          badgesListEl.innerHTML = `<span class="prof-badge-pill">⭐ Çaylak Oyuncu</span>`;
+          badgesListEl.innerHTML = `<span class="prof-badge-pill">⭐ 101 Oyuncusu</span>`;
         }
       }
 
@@ -6599,11 +6498,7 @@
       if (u.isMe) {
         if (myActions) myActions.style.display = 'flex';
         const nameInp = document.getElementById('edit-prof-name');
-        const clanInp = document.getElementById('edit-prof-clan');
-        const cityInp = document.getElementById('edit-prof-city');
         if (nameInp) nameInp.value = u.name;
-        if (clanInp) clanInp.value = u.clan || '';
-        if (cityInp) cityInp.value = u.city || '';
         selectEditAvatar(u.icon);
       } else {
         if (myActions) myActions.style.display = 'none';
@@ -6637,12 +6532,7 @@
 
     function saveUserProfile() {
       const nameInput = document.getElementById('edit-prof-name');
-      const clanInput = document.getElementById('edit-prof-clan');
-      const cityInput = document.getElementById('edit-prof-city');
-
       const nameVal = nameInput ? nameInput.value.trim() : '';
-      const clanVal = clanInput ? clanInput.value.trim() : '';
-      const cityVal = cityInput ? cityInput.value.trim() : '';
 
       if (!nameVal) {
         showWarningPopup('Geçersiz İsim', 'Lütfen geçerli bir oyuncu adı giriniz.');
@@ -6653,11 +6543,9 @@
       if (me) {
         me.name = nameVal;
         me.icon = selectedEditAvatarIcon;
-        me.clan = clanVal || 'Çöl Gülü';
-        me.city = cityVal || 'İstanbul';
 
         saveRegisteredUsers();
-        renderLeaderboard();
+        updateMyUserUI();
 
         // Modal alanlarını anında güncelle
         openProfile(me.id);
